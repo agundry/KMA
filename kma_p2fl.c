@@ -230,6 +230,7 @@ void kma_free(void* ptr, kma_size_t size)
                     current = current->header;
                 }
             }
+        }
         free_page(page);
         pageCount--;
     }
