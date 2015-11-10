@@ -1,0 +1,152 @@
+Zachary Allen, Austin Gundry
+
+Project 2, Kernal Memory Allocation
+
+We implemented the following algorithms:
+
+1. Resource Map
+2. Buddy System
+3. Power-of-two Free List
+
+Resource Map
+Resource Map uses base, size pairs to indicate where the free memory is located and how much is available. Each buffer block is just part of a doubly linked list, with no other data structures necessary. Also each block has a flag for if it is free or not. Coalescing is handled by removing blocks from a linked list, and pages are freed when there are no remaining blocks on them
+
+Page Requested/Freed/In Use:     2/    2/    0
+Test: PASS
+real 0.01
+user 0.00
+sys 0.00
+
+11340/(2 * 8196) = 0.6918
+
+Page Requested/Freed/In Use:    35/   35/    0
+Test: PASS
+real 0.02
+user 0.00
+sys 0.00
+
+232674/(35 * 8196) = 0.8111
+
+Page Requested/Freed/In Use:   843/  843/    0
+Test: PASS
+real 0.24
+user 0.21
+sys 0.01
+
+4520591/(843 * 8196) = 0.6542
+
+Page Requested/Freed/In Use:  1045/ 1045/    0
+Test: PASS
+real 0.42
+user 0.38
+sys 0.02
+
+7461135/(1045 * 8196) = 0.8711
+
+Page Requested/Freed/In Use:  7177/ 7177/    0
+Test: PASS
+real 3.47
+user 3.34
+sys 0.06
+
+5801011/(7177 * 8196) = 0.0986
+
+Best .8175
+Worst .0986
+Average .6256
+
+Buddy System
+We decided to not use bitmaps and instead use a binary tree that keeps an index of children blocks. This makes it easier to coalesce as the parent is just the sum of the two children. The offsets within each node can be determined using the index.
+
+Page Requested/Freed/In Use:     3/    3/    0
+Test: PASS
+real 0.01
+user 0.00
+sys 0.00
+
+11340/(3 * 8196) = 0.4612
+
+Page Requested/Freed/In Use:    48/   48/    0
+Test: PASS
+real 0.02
+user 0.00
+sys 0.01
+
+232674/(48 * 8196) = 0.5914
+
+Page Requested/Freed/In Use:  1430/ 1430/    0
+Test: PASS
+real 0.19
+user 0.16
+sys 0.01
+
+4520591/(1430 * 8196) = 0.3857
+
+Page Requested/Freed/In Use:  1465/ 1465/    0
+Test: PASS
+real 0.37
+user 0.34
+sys 0.02
+
+7461135/(1465 * 8196) = 0.6214
+
+Page Requested/Freed/In Use: 11115/11115/    0
+Test: PASS
+real 1.76
+user 1.70
+sys 0.04
+
+5801011/(11115 * 8196) = 0.0637
+
+Best .6214
+Worst .0637
+Average .4247
+
+Power-of-two Free List
+The only data structure is that of a block. Each free list has a "header" block that points to blocks the first block of its list. Blocks are only added to these lists if requests of that rounded size are made. Blocks on a page may not necessarily be contiguous, so iterating through all the blocks is necessary for freeing pages, which could make the runtime slow. 
+
+When we ran make test-vm power-of-two algorithm was passing all the tests in the output, however when we went to submit using make test-reg, the output said that our tests were failing. We are turning this in close to the deadline so we did not have a chance to look further into the error.
+
+Page Requested/Freed/In Use:     9/    9/    0
+Test: PASS
+real 0.00
+user 0.00
+sys 0.00
+
+11340/(9 * 8196) = 0.1537
+
+Page Requested/Freed/In Use:    50/   50/    0
+Test: PASS
+real 0.01
+user 0.00
+sys 0.00
+
+232674/(50 * 8196) = 0.5678
+
+Page Requested/Freed/In Use:  1395/ 1395/    0
+Test: PASS
+real 0.08
+user 0.06
+sys 0.00
+
+4520591/(1395 * 8196) = 0.3954
+
+Page Requested/Freed/In Use:  1251/ 1251/    0
+Test: PASS
+real 0.10
+user 0.07
+sys 0.03
+
+7461135/(1251 * 8196) = 0.7277
+
+Page Requested/Freed/In Use: 10197/10197/    0
+Test: PASS
+real 0.51
+user 0.48
+sys 0.02
+
+5801011/(10197 * 8196) = 0.0694
+
+Best .7277
+Worst .0694
+Average .3828
